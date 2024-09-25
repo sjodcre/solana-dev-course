@@ -5,9 +5,10 @@ import {
     sendAndConfirmTransaction,
     PublicKey,
     SendTransactionError,
+    LAMPORTS_PER_SOL,
   } from "@solana/web3.js";
   import "dotenv/config";
-  import { getKeypairFromEnvironment } from "@solana-developers/helpers";
+  import { airdropIfRequired, getKeypairFromEnvironment } from "@solana-developers/helpers";
    
   const suppliedToPubkey = process.argv[2] || null;
    
@@ -30,6 +31,13 @@ import {
 
   const balance = await connection.getBalance(senderKeypair.publicKey);
 console.log(`Current balance: ${balance} lamports`);
+
+const newBalance = await airdropIfRequired(
+  connection,
+  toPubkey,
+  1 * LAMPORTS_PER_SOL,
+  0.5 * LAMPORTS_PER_SOL,
+);
 
   const transaction = new Transaction();
  
